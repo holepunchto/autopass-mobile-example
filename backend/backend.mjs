@@ -36,10 +36,11 @@ pass.on('update', async (e) => {
   req.send('data')
 
   for await (const data of pass.list()) {
-    data.value = JSON.parse(data.value)
-    if (data.value[0] === 'password') {
+    const value = JSON.parse(data.value)
+
+    if (value[0] === 'password') {
       const req = rpc.request('message')
-      req.send(JSON.stringify(data.value))
+      req.send(JSON.stringify(value))
     }
   }
 })
