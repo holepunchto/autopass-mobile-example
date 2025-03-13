@@ -30,31 +30,28 @@ export default function App() {
     const worklet = new Worklet()
 
     // Correctly passing the args to worklet.start
-    worklet
-      .start('/app.bundle', bundle, [Platform.OS, pairingInvite])
-      .then(() => {
-        const { IPC } = worklet
-        // Initialise RPC
-        const rpc = new RPC(IPC, (req) => {
-          // Handle incoming RPC requests
+    worklet.start('/app.bundle', bundle, [Platform.OS, pairingInvite])
+    const { IPC } = worklet
+    // Initialise RPC
+    new RPC(IPC, (req) => {
+      // Handle incoming RPC requests
 
-          if (req.command === 'message') {
-            const data = b4a.toString(req.data)
-            const parsedData = JSON.parse(data) // Assuming data is a JSON string
-            const entry: PasswordEntry = {
-              username: parsedData[1],
-              password: parsedData[2],
-              website: parsedData[3]
-            }
-            // Update the dataList with the received entry
-            setDataList((prevDataList) => [...prevDataList, entry])
-          }
+      if (req.command === 'message') {
+        const data = b4a.toString(req.data)
+        const parsedData = JSON.parse(data) // Assuming data is a JSON string
+        const entry: PasswordEntry = {
+          username: parsedData[1],
+          password: parsedData[2],
+          website: parsedData[3]
+        }
+        // Update the dataList with the received entry
+        setDataList((prevDataList) => [...prevDataList, entry])
+      }
 
-          if (req.command === 'reset') {
-            setDataList(() => [])
-          }
-        })
-      })
+      if (req.command === 'reset') {
+        setDataList(() => [])
+      }
+    })
 
     setIsWorkletStarted(true) // Mark worklet as started
   }
