@@ -14,6 +14,7 @@ import { Worklet } from 'react-native-bare-kit'
 import bundle from './app.bundle'
 import RPC from 'bare-rpc'
 import b4a from 'b4a'
+import { RPC_RESET, RPC_MESSAGE } from '../rpc-commands.mjs'
 
 type PasswordEntry = {
   username: string
@@ -36,7 +37,7 @@ export default function App() {
     new RPC(IPC, (req) => {
       // Handle incoming RPC requests
 
-      if (req.command === 'message') {
+      if (req.command === RPC_MESSAGE) {
         const data = b4a.toString(req.data)
         const parsedData = JSON.parse(data) // Assuming data is a JSON string
         const entry: PasswordEntry = {
@@ -48,7 +49,7 @@ export default function App() {
         setDataList((prevDataList) => [...prevDataList, entry])
       }
 
-      if (req.command === 'reset') {
+      if (req.command === RPC_RESET) {
         setDataList(() => [])
       }
     })

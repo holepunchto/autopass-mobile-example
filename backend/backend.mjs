@@ -2,6 +2,7 @@
 
 import RPC from 'bare-rpc'
 import fs from 'bare-fs'
+import { RPC_RESET, RPC_MESSAGE } from '../rpc-commands.mjs'
 
 import Autopass from 'autopass'
 import Corestore from 'corestore'
@@ -32,14 +33,14 @@ const pass = await pair.finished()
 await pass.ready()
 
 pass.on('update', async (e) => {
-  const req = rpc.request('reset')
+  const req = rpc.request(RPC_RESET)
   req.send('data')
 
   for await (const data of pass.list()) {
     const value = JSON.parse(data.value)
 
     if (value[0] === 'password') {
-      const req = rpc.request('message')
+      const req = rpc.request(RPC_MESSAGE)
       req.send(JSON.stringify(value))
     }
   }
