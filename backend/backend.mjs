@@ -2,16 +2,15 @@
 
 import RPC from 'bare-rpc'
 import fs from 'bare-fs'
+import URL from 'bare-url'
+import { join } from 'bare-path'
 import { RPC_RESET, RPC_MESSAGE } from '../rpc-commands.mjs'
 
 import Autopass from 'autopass'
 import Corestore from 'corestore'
 const { IPC } = BareKit
 
-const path =
-  Bare.argv[0] === 'android'
-    ? '/data/data/to.holepunch.bare.expo/autopass-example'
-    : './tmp/autopass-example/'
+const path = join(URL.fileURLToPath(Bare.argv[0]), 'autopass-example')
 
 const rpc = new RPC(IPC, (req, error) => {
   // Handle two way communication here

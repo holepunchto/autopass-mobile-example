@@ -5,10 +5,10 @@ import {
   TextInput,
   Button,
   FlatList,
-  Platform,
   Alert,
   StyleSheet
 } from 'react-native'
+import { documentDirectory } from 'expo-file-system'
 import Clipboard from '@react-native-clipboard/clipboard'
 import { Worklet } from 'react-native-bare-kit'
 import bundle from './app.bundle'
@@ -31,7 +31,7 @@ export default function App() {
     const worklet = new Worklet()
 
     // Correctly passing the args to worklet.start
-    worklet.start('/app.bundle', bundle, [Platform.OS, pairingInvite])
+    worklet.start('/app.bundle', bundle, [String(documentDirectory), pairingInvite])
     const { IPC } = worklet
     // Initialise RPC
     new RPC(IPC, (req) => {
