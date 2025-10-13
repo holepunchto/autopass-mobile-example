@@ -4,6 +4,7 @@ import RPC from 'bare-rpc'
 import fs from 'bare-fs'
 import URL from 'bare-url'
 import { join } from 'bare-path'
+import goodbye from 'graceful-goodbye'
 import { RPC_RESET, RPC_MESSAGE } from '../rpc-commands.mjs'
 
 import Autopass from 'autopass'
@@ -28,7 +29,7 @@ fs.mkdirSync(path)
 const invite = Bare.argv[1]
 const pair = Autopass.pair(new Corestore(path), invite)
 const pass = await pair.finished()
-Bare.on('teardown', () => pass.close())
+goodbye(() => pass.close())
 
 await pass.ready()
 
